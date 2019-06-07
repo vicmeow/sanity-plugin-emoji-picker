@@ -96,37 +96,19 @@ export default {
 
 See the [name.js](/example/schemas/name.js) file for the full code.
 
-## Display emojis
+## Displaying emojis
 
 This plugin saves the emoji as an encoded URI. In order to display the emoji, you need to decode the value first.
 
 ```js
-/* 
+// JSON output
+// { 
+//  ...,
+//  "emoji":"%F0%9F%98%98",
+//  "name":"emoji"
+// }
 
-Example schema field:
-  {
-    name: 'emoji',
-    title: 'Emoji',
-    type: 'string',
-    options: {
-      emoji: true
-    }
-  }
-
-  JSON output:
-  {
-    "_createdAt":"2019-06-07T15:08:17Z",
-    "_id":"7427f7c6-9e2b-44b2-8f77-f579f8adcc88",
-    "_rev":"sDUck3VVFHMoLo5ZCNesFG",
-    "_type":"emoji",
-    "_updatedAt":"2019-06-07T15:08:17Z",
-    "emoji":"%F0%9F%98%98", // same as 😘
-    "name":"emoji",
-  } 
-
-*/
-// %F0%9F%98%98 > 😘
-const emoji = decodeURI(emoji) // 😘
+const emojiPic = decodeURI(emoji) // 😘
 
 ```
 
