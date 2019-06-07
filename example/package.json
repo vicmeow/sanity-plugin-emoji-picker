@@ -1,0 +1,31 @@
+{
+  "name": "emoji-picker",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Test Studio for trying out the Emoji Picker plugin",
+  "main": "package.json",
+  "author": "",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "sanity start",
+    "test": "sanity check"
+  },
+  "keywords": [
+    "sanity",
+    "plugin",
+    "slider",
+    "component"
+  ],
+  "dependencies": {
+    "@sanity/base": "^0.140.32",
+    "@sanity/components": "^0.140.32",
+    "@sanity/core": "^0.140.32",
+    "@sanity/default-layout": "^0.140.32",
+    "@sanity/default-login": "^0.140.15",
+    "@sanity/desk-tool": "^0.140.32",
+    "@sanity/google-maps-input": "^0.140.32",
+    "@sanity/rich-date-input": "^0.140.3",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
+  }
+}

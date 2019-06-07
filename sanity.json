@@ -1,0 +1,16 @@
+{
+  "paths": {
+    "source": "./src",
+    "compiled": "./lib"
+  },
+  "parts": [
+    {
+      "name": "part:@sanity/base/components/emoji-picker",
+      "description": "React component which provides an emoji picker"
+    },
+    {
+      "implements": "part:@sanity/base/components/emoji-picker",
+      "path": "components/EmojiPicker.js"
+    }
+  ]
+}
