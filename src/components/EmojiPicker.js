@@ -4,11 +4,15 @@ import FormField from 'part:@sanity/components/formfields/default'
 import './emoji-picker.css?raw'
 import 'emoji-mart/css/emoji-mart.css?raw'
 import { Picker } from 'emoji-mart'
-
 import PatchEvent, { set, unset } from 'part:@sanity/form-builder/patch-event'
 
 export default class EmojiPicker extends React.Component {
   static propTypes = {
+    type: PropTypes.shape({
+      options: PropTypes.shape({
+        emoji: PropTypes.oneOfType([PropTypes.bool, PropTypes.object])
+      })
+    }),
     value: PropTypes.string
   }
 
@@ -17,75 +21,74 @@ export default class EmojiPicker extends React.Component {
   }
 
   state = {
-    showEmojis: false
+    showPicker: false
   }
 
   // Handles opening the emoji picker
-  showEmojis = event => {
+  showPicker = event => {
     this.setState({
-      showEmojis: true
-    },  () => document.addEventListener('click', this.hideEmojis))
+      showPicker: true
+    },  () => document.addEventListener('click', this.hidePicker))
   }
 
   // Handles closing the emoji picker
-  hideEmojis = event => {
-    if (this.emojiPicker !== null && !this.emojiPicker.contains(event.target)) {
+  hidePicker = event => {
+    event.preventDefault()
+    if (this._emojiPicker !== null && !this._emojiPicker.contains(event.target)) {
       this.setState({
-        showEmojis: false
-      }, () => document.removeEventListener('click', this.hideEmojis))
+        showPicker: false
+      }, () => document.removeEventListener('click', this.hidePicker))
     }
   }
 
-  // Handles adding emoji
-  addEmoji = event => {
-    // Split emoji codes into array at - when there are multiple ones
-    const emojiCodes = event.unified.split('-').map(code => parseInt(code, 16))
-    // Create emoji from codepoints
-    const emoji = String.fromCodePoint(...emojiCodes)
-    // Encode the emoji for storage
-    const code = encodeURI(emoji)
+  // Handles choosing an emoji
+  addEmoji = emoji => {
+    // Incoming options from schema
+    const options = this.props.type.options.emoji
+
+    // Pick the emoji type to use from incoming options
+    // default: native
+    const value = !options.type || options.type === 'native'
+      ? String(emoji.native)
+      : emoji[options.type]
+    
+    // Send off emoji
+    const patch = value === '' ? unset() : set(value)
+    this.props.onChange(PatchEvent.from(patch))
+
     // Close emoji picker and remove event listener
     this.setState({
-      showEmojis: false
-    }, () => document.removeEventListener('click', this.hideEmojis))
-    // Send off emoji code
-    // Using emoji here breaks at PatchEvent.from() and encodeURI
-    // error: malformed URI sequence
-    const patch = emojiCodes === '' ? unset() : set(String(code))
-    this.props.onChange(PatchEvent.from(patch))
+      showPicker: false
+    }, () => document.removeEventListener('click', this.hidePicker))
   }
 
   render() {
     const { type, value } = this.props
-    // Decode the emoji for display
-    const emoji = decodeURI(value)
+    const options = type.options.emoji
     return (
       <div className="emoji-picker">
         <FormField
           className="emoji-field"
           label={type.title}
           description={type.description}>
-          <button
-            className="picker-button"
-            onClick={this.showEmojis}
-            ref={element => this._inputElement = element}>
-              {value === undefined
-                ? 'Emoji'
-                :  <div className="emoji">{emoji}</div> }
-          </button>
+          <div className="emoji-button-wrapper">
+            <button
+              className={
+                options.type
+                  ? `emoji-button emoji-button-${options.type}`
+                  : 'emoji-button emoji-button-native'
+              }
+              ref={element => this._inputElement = element}
+              onClick={this.showPicker}>
+              <span className="emoji">{value}</span>
+            </button>
+          </div>
           {
-            this.state.showEmojis && 
-            <div ref={el => (this.emojiPicker = el)}>
-              <Picker 
-                style={
-                  { 
-                    position: 'absolute', 
-                    top: '-1rem', 
-                    left: '4.5rem', 
-                    zIndex: 100 
-                  }
-                } 
-                onSelect={this.addEmoji} />
+            this.state.showPicker && 
+            <div
+              className="picker-wrapper"
+              ref={element => this._emojiPicker = element}>
+              <Picker onSelect={this.addEmoji} />
             </div>
           }
         </FormField>

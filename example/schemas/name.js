@@ -8,8 +8,16 @@ export default {
       name: 'emoji',
       title: 'Emoji',
       type: 'string',
+      description: 'Pick an emoji, any emoji.',
       options: {
-        emoji: true
+        emoji: {
+          type: 'name',
+          picker: {
+            showSkinTones: true,
+            emoji: 'heart',
+            title: 'Sanity + Emojis'
+          }
+        }
       }
     },
     {
@@ -21,17 +29,16 @@ export default {
   preview: {
     select: {
       title: 'name',
-      emojiCode: 'emoji'
+      emoji: 'emoji'
     },
     prepare(selection) {
-      const { title, emojiCode } = selection
-      const emoji = decodeURI(emojiCode)
+      const { title, emoji } = selection
       const styles = {
         fontSize: '1.8rem'
       }
       return {
-        title: title,
-        media: <div style={styles}>{emoji}</div>
+        title: `${emoji} ${title}`,
+        // media: <div style={styles}>{emoji}</div>
       }
     }
   }

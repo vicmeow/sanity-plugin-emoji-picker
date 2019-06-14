@@ -8,28 +8,48 @@
   align-items: center;
   flex-direction: row-reverse;
   justify-content: flex-end;
+  flex-wrap: wrap;
 }
 
-.picker-button {
-  padding: .2rem;
-  border: 0;
+.picker-wrapper {
+  position: absolute;
+  z-index: 100;
+}
+
+.emoji-button-wrapper {
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+  margin-right: 1rem;
+}
+
+.emoji-button {
+  border: none;
   background: 0;
-  border-radius: 50%;
-  padding: .8rem;
-  transition: all .2s linear;
-  margin-right: .5rem;
-  height: 4rem;
-  width: 4rem;
+  align-self: center;
+  padding: 0;
+  margin-bottom: .2rem;
+  transition: background .2s linear;
+  cursor: pointer;
 }
 
-.picker-button:hover, .picker-button:focus {
-  border: 0;
-  outline: 0;
-  cursor: pointer;
-  background: rgb(242, 242, 242, .7);
+.emoji-button-native {
+  position: relative;
+  font-size: 2rem;
+  border-radius: 50%;
+  height: 3.2rem;
+  width: 3.2rem;
+}
+
+.emoji-button-native:hover {
+  background: rgba(153, 153, 153, .1);
 }
 
 .emoji {
-  font-size: 2.5rem;
-  height: .9em;
+  font-weight: bold;
+}
+
+.emoji-button-native .emoji {
+  display: block;
+  margin-top: .4rem;
 }
