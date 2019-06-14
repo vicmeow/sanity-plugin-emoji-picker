@@ -17,14 +17,14 @@
     "component"
   ],
   "dependencies": {
-    "@sanity/base": "^0.140.32",
-    "@sanity/components": "^0.140.32",
-    "@sanity/core": "^0.140.32",
-    "@sanity/default-layout": "^0.140.32",
-    "@sanity/default-login": "^0.140.15",
-    "@sanity/desk-tool": "^0.140.32",
-    "@sanity/google-maps-input": "^0.140.32",
-    "@sanity/rich-date-input": "^0.140.3",
+    "@sanity/base": "^0.140.34",
+    "@sanity/components": "^0.140.34",
+    "@sanity/core": "^0.140.34",
+    "@sanity/default-layout": "^0.140.34",
+    "@sanity/default-login": "^0.140.34",
+    "@sanity/desk-tool": "^0.140.34",
+    "@sanity/google-maps-input": "^0.140.34",
+    "@sanity/rich-date-input": "^0.140.34",
     "react": "^16.6.3",
     "react-dom": "^16.6.3"
   }
