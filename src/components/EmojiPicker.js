@@ -80,7 +80,7 @@ export default class EmojiPicker extends React.Component {
               }
               ref={element => this._inputElement = element}
               onClick={this.showPicker}>
-              <span className="emoji">{value}</span>
+              <span className="emoji">{value !== undefined ? value : 'Emoji'}</span>
             </button>
           </div>
           {
