@@ -1,7 +1,7 @@
 import React from 'react'
 export default {
-  name: 'name',
-  title: 'Name',
+  name: 'emoji',
+  title: 'Emoji ❤️',
   type: 'document',
   fields: [
     {
@@ -11,9 +11,8 @@ export default {
       description: 'Pick an emoji, any emoji.',
       options: {
         emoji: {
-          type: 'name',
           picker: {
-            showSkinTones: true,
+            color: '#f04a39',
             emoji: 'heart',
             title: 'Sanity + Emojis'
           }
@@ -29,17 +28,7 @@ export default {
   preview: {
     select: {
       title: 'name',
-      emoji: 'emoji'
-    },
-    prepare(selection) {
-      const { title, emoji } = selection
-      const styles = {
-        fontSize: '1.8rem'
-      }
-      return {
-        title: `${emoji} ${title}`,
-        // media: <div style={styles}>{emoji}</div>
-      }
+      subtitle: 'emoji'
     }
   }
 }

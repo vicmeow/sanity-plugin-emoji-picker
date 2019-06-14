@@ -1,4 +1,4 @@
-![Emoji picker example](/docs/emoji-picker-example.png)
+![Emoji picker example](/docs/sanity-emoji.png)
 
 # Emoji Picker
 
@@ -47,7 +47,7 @@ See the [sanity.json](/example/sanity.json) file for the full code.
 
 ### **3. Use in a schema**
 
-Add this to one of your schema types. You should now be able to pick an emoji for this field when you start the Sanity Studio.
+To use the emoji picker in your schema you need to enable it on a field with a type of `string`. You can do this by setting `emoji: true` under the field's options.
 
 ```
 {
@@ -61,56 +61,52 @@ Add this to one of your schema types. You should now be able to pick an emoji fo
 }
 ```
 
-See the [name.js](/example/schemas/name.js) file for the full code.
+`emoji` can also be an object. You can choose how you want to display the emoji by defining a `type`.
 
-### **4. Preview emoji in the Studio (optional)**
+```js
+{
+  name: 'emoji',
+  title: 'Emoji',
+  type: 'string',
+  description: 'Pick an emoji',
+  options: {
+    emoji: {
+      type: 'native'
+    }
+  }
+}
+```
 
-![Emoji picker example](/docs/emoji-picker-example.png)
+Available type options are: `native` (default), `colons`, `name`, `unified`.
 
-To create a custom preview using the emoji in the Studio, add this to your schema:
+You can also customize the emoji picker further with the options available in [Emoji Mart](https://github.com/missive/emoji-mart) under a `picker` option, including:
 
-```js 
-import React from 'react'
-export default {
-  ..., 
-  preview: {
-    select: {
-      title: 'name',
-      emojiCode: 'emoji'
-    },
-    prepare(selection) {
-      const { title, emojiCode } = selection
-      const emoji = decodeURI(emojiCode)
-      const styles = {
-        fontSize: '1.8rem'
-      }
-      return {
-        title: title,
-        // For this to work you must import React from 'react' like above:
-        media: <div style={styles}>{emoji}</div>
+- `set`: The emoji set: `apple`, `google`, `twitter`, `emojione`, `messenger`, `facebook`. Default is `apple`.
+- `include`/`exclude`: only load included or don't load excluded emoji categories
+- `color`: The top bar anchors select and hover color
+- `recent`: Pass your own frequently used emojis as array of string IDs
+
+And more! See all [available options](https://github.com/missive/emoji-mart#picker).
+
+```js
+// schemas/name.js
+{
+  name: 'emoji',
+  title: 'Emoji',
+  type: 'string',
+  description: 'Pick an emoji',
+  options: {
+    emoji: {
+      picker: {
+        set: 'messenger',
+        emoji: 'heart',
+        title: 'Sanity + Emojis'
       }
     }
   }
 }
 ```
 
-See the [name.js](/example/schemas/name.js) file for the full code.
-
-## Displaying emojis
-
-This plugin saves the emoji as an encoded URI. In order to display the emoji, you need to decode the value first.
-
-```js
-// JSON output
-// { 
-//  ...,
-//  "emoji":"%F0%9F%98%98",
-//  "name":"emoji"
-// }
-
-const emojiPic = decodeURI(emoji) // 😘
-
-```
 
 ## **Usage, standalone**
 
