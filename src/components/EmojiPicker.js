@@ -88,7 +88,7 @@ export default class EmojiPicker extends React.Component {
             <div
               className="picker-wrapper"
               ref={element => this._emojiPicker = element}>
-              <Picker onSelect={this.addEmoji} />
+              <Picker onSelect={this.addEmoji} {...options.picker}/>
             </div>
           }
         </FormField>
