@@ -1,19 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import FormField from 'part:@sanity/components/formfields/default'
+import PatchEvent, { set, unset } from 'part:@sanity/form-builder/patch-event'
 import './emoji-picker.css?raw'
 import 'emoji-mart/css/emoji-mart.css?raw'
 import { Picker } from 'emoji-mart'
-import PatchEvent, { set, unset } from 'part:@sanity/form-builder/patch-event'
 
 export default class EmojiPicker extends React.Component {
   static propTypes = {
     type: PropTypes.shape({
       options: PropTypes.shape({
-        emoji: PropTypes.oneOfType([PropTypes.bool, PropTypes.object])
-      })
+        emoji: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]).isRequired
+      }).isRequired
     }),
-    value: PropTypes.string
+    value: PropTypes.string,
+    onChange: PropTypes.func.isRequired
   }
 
   focus() {
