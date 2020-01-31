@@ -11,7 +11,7 @@ export default class EmojiPicker extends React.Component {
     type: PropTypes.shape({
       options: PropTypes.object
     }),
-    value: PropTypes.string,
+    value: PropTypes.object,
     onChange: PropTypes.func.isRequired
   }
 
@@ -23,7 +23,8 @@ export default class EmojiPicker extends React.Component {
   }
 
   state = {
-    isPickerOpen: false
+    isPickerOpen: false,
+    fallbackValue: this.props.value || {}
   }
 
   // Handle opening the emoji picker
@@ -48,7 +49,27 @@ export default class EmojiPicker extends React.Component {
   handleUpdateEmojiFields = emoji => {
     const { type, onChange, value } = this.props
     const { set, unset } = patches
+
+    this.setState({ fallbackValue: emoji })
+
+    const allowedFields = [
+      "id",
+      "name",
+      "colons",
+      "short_names",
+      "unified",
+      "native",
+      "imageUrl",
+      "keywords",
+      "customCategory",
+      "skin",
+      "emoticons",
+      "text"
+    ]
     const fields = Object.keys(emoji)
+      .map(key => {
+        if (allowedFields.some(value => value === key)) return key
+      })
       .map(key => {
         if (!emoji[key]) {
           // Unset the value if no value
@@ -63,12 +84,11 @@ export default class EmojiPicker extends React.Component {
       .filter(Boolean)
 
     // Patch the fields
-    onChange(PatchEvent.from(...fields))
-
-    console.log("close picker")
+    const unsetFields = allowedFields.map(key => unset([key]))
+    onChange(PatchEvent.from(...unsetFields, ...fields))
     // Close emoji picker and remove event listener
     this.setState({ isPickerOpen: false }, () =>
-      document.removeEventListener("click", this.handleHidePicker)
+      document.removeEventListener("click", this.handleHidePicker, null)
     )
   }
 
@@ -78,34 +98,10 @@ export default class EmojiPicker extends React.Component {
 
   render() {
     const { type, value } = this.props
-    const { isPickerOpen } = this.state
-    const options = type.options
-    const customEmojis = [
-      {
-        name: "Octocat",
-        short_names: ["octocat"],
-        text: "",
-        emoticons: [],
-        keywords: ["github"],
-        imageUrl:
-          "https://github.githubassets.com/images/icons/emoji/octocat.png",
-        customCategory: "GitHub"
-      },
-      {
-        name: "Test Flag",
-        short_names: ["test"],
-        text: "",
-        emoticons: [],
-        keywords: ["test", "flag"],
-        spriteUrl:
-          "https://unpkg.com/emoji-datasource-twitter@4.0.4/img/twitter/sheets-256/64.png",
-        sheet_x: 1,
-        sheet_y: 1,
-        size: 64,
-        sheetColumns: 52,
-        sheetRows: 52
-      }
-    ]
+    const { isPickerOpen, fallbackValue } = this.state
+    const { options } = type
+    const endValue = value || fallbackValue
+    const fields = type.fields || []
     return (
       <div className={styles.container}>
         <FormField label={type.title} description={type.description}>
@@ -117,13 +113,13 @@ export default class EmojiPicker extends React.Component {
                 ref={this.inputElement}
                 onClick={this.handleShowPicker}
               >
-                {value && value.imageUrl ? (
+                {endValue && endValue.imageUrl ? (
                   <div className={styles.emoji}>
-                    <img src={value.imageUrl} alt={value.name} />
+                    <img src={endValue.imageUrl} alt={endValue.name} />
                   </div>
                 ) : (
                   <div className={styles.emoji}>
-                    {(value && value.native) || "🐱"}
+                    {(endValue && endValue.native) || "🐱"}
                   </div>
                 )}
               </button>
@@ -132,7 +128,6 @@ export default class EmojiPicker extends React.Component {
                 <div className={styles.pickerWrapper} ref={this.emojiPicker}>
                   <Picker
                     onSelect={this.handleUpdateEmojiFields}
-                    custom={customEmojis}
                     {...options.picker}
                   />
                 </div>
@@ -141,30 +136,35 @@ export default class EmojiPicker extends React.Component {
 
             <div className={styles.fieldsWrapper}>
               {!options.hideSummary &&
-                value &&
-                type.fields.map(field => {
-                  if (!value[field.name]) return null
-                  if (Array.isArray(value[field.name])) {
-                    if (value[field.name].length === 0) return null
+                fields.map(field => {
+                  if (!endValue) return null
+                  if (typeof endValue[field.name] === "string") {
                     return (
-                      <div className={styles.field}>
+                      <div
+                        key={field.name}
+                        className={`${styles.field} ${
+                          field.name === "imageUrl" ? styles.urlField : ""
+                        }`}
+                      >
                         <div className={styles.label}>{field.type.title}</div>
                         <div className={styles.value}>
-                          {value[field.name].join(", ")}
+                          {endValue[field.name]}
                         </div>
                       </div>
                     )
                   }
-                  return (
-                    <div
-                      className={`${styles.field} ${
-                        field.name === "imageUrl" ? styles.urlField : ""
-                      }`}
-                    >
-                      <div className={styles.label}>{field.type.title}</div>
-                      <div className={styles.value}>{value[field.name]}</div>
-                    </div>
-                  )
+                  if (Array.isArray(endValue[field.name])) {
+                    if (endValue[field.name].length === 0) return null
+                    return (
+                      <div className={styles.field} key={field.name}>
+                        <div className={styles.label}>{field.type.title}</div>
+                        <div className={styles.value}>
+                          {endValue[field.name].join(", ")}
+                        </div>
+                      </div>
+                    )
+                  }
+                  return null
                 })}
             </div>
           </div>
