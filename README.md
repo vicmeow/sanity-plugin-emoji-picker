@@ -1,8 +1,8 @@
-![Emoji picker example](/docs/sanity-emoji.png)
-
 # Emoji Picker
 
 An emoji picker for Sanity that uses [Emoji Mart](https://github.com/missive/emoji-mart).
+
+![Emoji picker example](/docs/picker.png)
 
 ## Installation
 
@@ -30,7 +30,11 @@ export default {
 }
 ```
 
-This will render a field where you can select an emoji using the emoji-mart picker, and see information about the emoji you pick. The schema for the emoji type fields you can query specific emoji info for looks like this:
+This will render a field where you can select an emoji using the emoji-mart picker, and see information about the emoji you pick. 
+
+![Emoji info example](/docs/summary.png)
+
+The schema for the emoji type fields you can query specific emoji info for looks like this:
 
 ```
 export default {
@@ -84,6 +88,22 @@ export default {
     {
       name: "native",
       title: "Native",
+      type: "string"
+    },
+    {
+      name: "imageUrl",
+      title: "Image URL",
+      type: "url"
+    },
+    {
+      name: "keywords",
+      title: "Keywords",
+      type: "array",
+      of: [{ type: "string" }]
+    },
+    {
+      name: "customCategory",
+      title: "Custom Category",
       type: "string"
     }
   ]
@@ -141,10 +161,13 @@ To customize the picker, you can pass the same options as the emoji-mart picker 
   type: 'emoji',
   options: {
     picker: {
-      title: 'My Emojis',
-      color: 'red',
-      defaultSkin: 3
+      title: 'My Custom Title',
+      color: 'hotpink',
+      skin: 5,
+      emoji: 'cat'
     }
   }
 }
 ```
+
+![Emoji picker example](/docs/custom.png)
