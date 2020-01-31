@@ -4,118 +4,147 @@
 
 An emoji picker for Sanity that uses [Emoji Mart](https://github.com/missive/emoji-mart).
 
-## **Usage as a Sanity plugin**
+## Installation
 
 ```
 cd my-sanity-studio
-sanity install sanity-emoji
-mkdir parts
-touch parts/inputResolver.js
+sanity install emoji-picker
 ```
 
-### **1. Add an input resolver**
+## Usage
 
-Add this to `parts/inputResolver.js`:
+To use the emoji picker, add `emoji` as the type of a field in your schema.
 
-```
-import EmojiPicker from '../../src/components/EmojiPicker'
-import {get} from 'lodash'
-
-export default function resolveInput(type) {
-  if (type.name === 'string' && get(type, 'options.emoji')) {
-    return EmojiPicker
-  }
-  return false
+```js
+export default {
+  name: 'mySchema',
+  title: 'My Schema',
+  type: 'document',
+  fields: [
+    {
+      name: 'myField',
+      title: 'My field',
+      type: 'emoji'
+    }
+  ]
 }
 ```
 
-See the [inputResolver.js](/example/parts/inputResolver.js) file for the full code.
-
-### **2. Configure `sanity.json`**
-
-Add this to the `parts` array in your `sanity.json` file:
+This will render a field where you can select an emoji using the emoji-mart picker, and see information about the emoji you pick. The schema for the emoji type fields you can query specific emoji info for looks like this:
 
 ```
-{
-  "implements": "part:@sanity/form-builder/input-resolver",
-  "path": "./parts/inputResolver"
+export default {
+  name: "emoji",
+  title: "Emoji",
+  type: "object",
+  inputComponent: EmojiInput,
+  fields: [
+    {
+      name: "id",
+      title: "ID",
+      type: "string"
+    },
+    {
+      name: "name",
+      title: "Name",
+      type: "string"
+    },
+    {
+      name: "colons",
+      title: "Colons",
+      type: "string"
+    },
+    {
+      name: "text",
+      title: "Text",
+      type: "string"
+    },
+    {
+      name: "emoticons",
+      title: "Emoticons",
+      type: "array",
+      of: [{ type: "string" }]
+    },
+    {
+      name: "short_names",
+      title: "Short-names",
+      type: "array",
+      of: [{ type: "string" }]
+    },
+    {
+      name: "skin",
+      title: "Skin",
+      type: "number"
+    },
+    {
+      name: "unified",
+      title: "Unified",
+      type: "string"
+    },
+    {
+      name: "native",
+      title: "Native",
+      type: "string"
+    }
+  ]
 }
 ```
 
-See the [sanity.json](/example/sanity.json) file for the full code.
-
-
-### **3. Use in a schema**
-
-To use the emoji picker in your schema you need to enable it on a field with a type of `string`. You can do this by setting `emoji: true` under the field's options.
+If you have a document called `mySchema` that has an `emoji` field with the `house` emoji picked:
 
 ```
-{
-  name: 'emoji',
-  title: 'Emoji',
-  type: 'string',
-  description: 'Pick an emoji',
-  options: {
-    emoji: true
-  }
-}
+const query = `*[_type == 'mySchema'][0]`
+client.get(query).then(result => {
+  console.log(result)
+})
+
+// returns:
+// {
+//   ...,
+//   "emoji": {
+//     "colons": ":house:",
+//     "emoticons": [],
+//     "id": "house",
+//     "name": "House Building",
+//     "native": "🏠",
+//     "short_names": ["house"],
+//     "unified": "1f3e0"
+//   }
+// }
+
 ```
 
-`emoji` can also be an object. You can choose how you want to display the emoji by defining a `type`.
+
+### Customization
+
+To hide the summary info about the picked emoji, you can add `hideSummary` to the options:
 
 ```js
 {
-  name: 'emoji',
-  title: 'Emoji',
-  type: 'string',
-  description: 'Pick an emoji',
+  name: 'myFieldName',
+  title: 'My Field',
+  type: 'emoji',
   options: {
-    emoji: {
-      type: 'native'
-    }
+    hideSummary: true
   }
 }
 ```
 
-Available type options are: `native` (default), `colons`, `name`, `unified`.
 
-You can also customize the emoji picker further with the options available in [Emoji Mart](https://github.com/missive/emoji-mart) under a `picker` option, including:
+To customize the picker, you can pass the same options as the emoji-mart picker accepts in a picker `object`. [Full list of options.](https://github.com/missive/emoji-mart#picker)
 
-- `set`: The emoji set: `apple`, `google`, `twitter`, `emojione`, `messenger`, `facebook`. Default is `apple`.
-- `include`/`exclude`: only load included or don't load excluded emoji categories
-- `color`: The top bar anchors select and hover color
-- `recent`: Pass your own frequently used emojis as array of string IDs
-
-And more! See all [available options](https://github.com/missive/emoji-mart#picker).
 
 ```js
-// schemas/name.js
 {
-  name: 'emoji',
-  title: 'Emoji',
-  type: 'string',
-  description: 'Pick an emoji',
+  name: 'myFieldName',
+  title: 'My Field',
+  type: 'emoji',
   options: {
-    emoji: {
-      picker: {
-        set: 'messenger',
-        emoji: 'heart',
-        title: 'Sanity + Emojis'
-      }
+    picker: {
+      title: 'My Emojis',
+      color: 'red',
+      defaultSkin: 3
     }
   }
 }
-```
-
-
-## **Usage, standalone**
-
-```bash
-git clone // this repo
-yarn install // or npm install
-yarn build // or npm run build
-cd example/
-yarn install // or npm install
-sanity start
-open http://localhost:3333
 ```

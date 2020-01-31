@@ -5,12 +5,8 @@
   },
   "parts": [
     {
-      "name": "part:@sanity/base/components/emoji-picker",
-      "description": "React component which provides an emoji picker"
-    },
-    {
-      "implements": "part:@sanity/base/components/emoji-picker",
-      "path": "components/EmojiPicker.js"
+      "implements": "part:@sanity/base/schema-type",
+      "path": "./lib/schema.js"
     }
   ]
 }

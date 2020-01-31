@@ -1,23 +1,24 @@
 {
   "name": "sanity-plugin-emoji-picker",
   "version": "0.0.1",
-  "description": "Emoji picker for Sanity",
+  "description": "Emoji picker for Sanity Studio",
   "author": "victoria@sanity.io",
   "homepage": "https://github.com/vicbergquist/sanity-emoji-picker#readme",
   "public": true,
   "keywords": [
     "sanity",
     "plugin",
-    "slider",
-    "component"
+    "emoji",
+    "picker"
   ],
-  "main": "lib/index.js",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/vicbergquist/sanity-emoji-picker/issues"
   },
+  "main": "index.js",
   "scripts": {
     "build": "babel src -d lib --copy-files",
+    "build-watch": "babel src -d lib --copy-files --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,23 +26,20 @@
     "url": "git+https://github.com/vicbergquist/sanity-emoji-picker.git"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^10.0.1",
+    "babel-cli": "6.26.0",
+    "babel-preset-es2015": "6.24.1",
+    "babel-preset-react": "6.24.1",
+    "babel-eslint": "^7.2.3",
     "babel-plugin-syntax-class-properties": "^6.13.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "emoji-mart": "^2.11.1",
-    "eslint": "^5.9.0",
-    "eslint-config-sanity": "^2.1.4",
-    "eslint-plugin-react": "^7.11.1",
-    "react-hot-loader": "^4.3.12"
+    "babel-plugin-transform-class-properties": "^6.24.1"
   },
   "peerDependencies": {
-    "react": "16.x"
+    "@sanity/form-builder": "^0.144.0",
+    "@sanity/components": "^0.144.0"
   },
   "dependencies": {
-    "@sanity/form-builder": "^0.140.32",
-    "prop-types": "^15.6.2"
+    "emoji-mart": "^2.11.2",
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0"
   }
 }
