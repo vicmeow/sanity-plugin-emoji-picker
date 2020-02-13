@@ -6,6 +6,21 @@ import styles from "./styles.css"
 import "emoji-mart/css/emoji-mart.css?raw"
 import { Picker, Emoji } from "emoji-mart"
 
+const allowedFields = [
+  "id",
+  "name",
+  "colons",
+  "short_names",
+  "unified",
+  "native",
+  "imageUrl",
+  "keywords",
+  "customCategory",
+  "skin",
+  "emoticons",
+  "text"
+]
+
 export default class EmojiPicker extends React.Component {
   static propTypes = {
     type: PropTypes.shape({
@@ -21,6 +36,12 @@ export default class EmojiPicker extends React.Component {
   state = {
     isPickerOpen: false,
     fallbackValue: this.props.value || {}
+  }
+
+  focus() {
+    if (this.inputElement) {
+      this.inputElement.current.focus()
+    }
   }
 
   // Handle opening the emoji picker
@@ -48,20 +69,6 @@ export default class EmojiPicker extends React.Component {
 
     this.setState({ fallbackValue: emoji })
 
-    const allowedFields = [
-      "id",
-      "name",
-      "colons",
-      "short_names",
-      "unified",
-      "native",
-      "imageUrl",
-      "keywords",
-      "customCategory",
-      "skin",
-      "emoticons",
-      "text"
-    ]
     const fields = Object.keys(emoji)
       .map(key => {
         if (allowedFields.some(value => value === key)) return key
@@ -88,10 +95,11 @@ export default class EmojiPicker extends React.Component {
     )
   }
 
-  componentDidMount() {
-    if (this.inputElement) {
-      this.inputElement.current.focus()
-    }
+  handleUnsetEmoji = () => {
+    const { onChange } = this.props
+    const { unset } = patches
+    const unsetFields = allowedFields.map(key => unset([key]))
+    onChange(PatchEvent.from(...unsetFields))
   }
 
   componentWillUnmount() {
@@ -109,23 +117,36 @@ export default class EmojiPicker extends React.Component {
         <FormField label={type.title} description={type.description}>
           <div className={styles.emojiWrapper}>
             <div className={styles.emojiButtonWrapper}>
-              <button
-                aria-labelledby="button-label"
-                className={styles.emojiButtonNative}
-                ref={this.inputElement}
-                onClick={this.handleShowPicker}
-              >
-                {endValue && endValue.imageUrl ? (
-                  <div className={styles.emoji}>
-                    <img src={endValue.imageUrl} alt={endValue.name} />
-                  </div>
-                ) : (
-                  <div className={styles.emoji}>
-                    {(endValue && endValue.native) || "🐱"}
-                  </div>
+              <div className={styles.button}>
+                <button
+                  aria-label="Select emoji"
+                  className={styles.emojiButtonNative}
+                  ref={this.inputElement}
+                  onClick={this.handleShowPicker}
+                >
+                  {endValue.native ? (
+                    endValue && endValue.imageUrl ? (
+                      <div className={styles.emoji}>
+                        <img src={endValue.imageUrl} alt={endValue.name} />
+                      </div>
+                    ) : (
+                      <div className={styles.emoji}>
+                        {(endValue && endValue.native) || ""}
+                      </div>
+                    )
+                  ) : (
+                    <div className={styles.selectText}>Select emoji</div>
+                  )}
+                </button>
+                {endValue.native && (
+                  <button
+                    className={styles.unsetButton}
+                    onClick={this.handleUnsetEmoji}
+                  >
+                    Remove emoji
+                  </button>
                 )}
-              </button>
-              <div id="button-label">Pick emoji</div>
+              </div>
               {isPickerOpen && (
                 <div className={styles.pickerWrapper} ref={this.emojiPicker}>
                   <Picker
