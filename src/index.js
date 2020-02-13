@@ -18,10 +18,6 @@ export default class EmojiPicker extends React.Component {
   emojiPicker = React.createRef()
   inputElement = React.createRef()
 
-  focus() {
-    this.inputElement.focus()
-  }
-
   state = {
     isPickerOpen: false,
     fallbackValue: this.props.value || {}
@@ -90,6 +86,12 @@ export default class EmojiPicker extends React.Component {
     this.setState({ isPickerOpen: false }, () =>
       document.removeEventListener("click", this.handleHidePicker, null)
     )
+  }
+
+  componentDidMount() {
+    if (this.inputElement) {
+      this.inputElement.current.focus()
+    }
   }
 
   componentWillUnmount() {
