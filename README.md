@@ -2,7 +2,7 @@
 
 An emoji picker for Sanity that uses [Emoji Mart](https://github.com/missive/emoji-mart).
 
-![Emoji picker example](/docs/picker.png)
+![Emoji picker example](/docs/emoji-input.png)
 
 ## Installation
 
@@ -13,28 +13,26 @@ sanity install emoji-picker
 
 ## Usage
 
-To use the emoji picker, add `emoji` as the type of a field in your schema.
+To use the emoji picker, add `emoji` as the type of a field in your schema. This will render a field where you can select an emoji using the emoji-mart picker, and see a summary of the emoji you selected.
 
 ```js
 export default {
-  name: 'mySchema',
-  title: 'My Schema',
-  type: 'document',
+  name: "mySchema",
+  title: "My Schema",
+  type: "document",
   fields: [
     {
-      name: 'myField',
-      title: 'My field',
-      type: 'emoji'
-    }
-  ]
+      name: "myField",
+      title: "My field",
+      type: "emoji",
+    },
+  ],
 }
 ```
 
-This will render a field where you can select an emoji using the emoji-mart picker, and see information about the emoji you pick. 
+The emoji picker saves all the details about the emoji you selected\*. This allows you to query specific emoji info when you need the emoji elsewhere.
 
-![Emoji info example](/docs/summary.png)
-
-The schema for the emoji type fields you can query specific emoji info for looks like this:
+(\*) Please note that this means you will see all the related emoji information when reviewing the changes of a document with the emoji type using the Review Changes feature.
 
 ```
 export default {
@@ -110,7 +108,7 @@ export default {
 }
 ```
 
-If you have a document called `mySchema` that has an `emoji` field with the `house` emoji picked:
+If you query for a document that uses the `emoji` type and has the `house` emoji selected, it will return:
 
 ```
 const query = `*[_type == 'mySchema'][0]`
@@ -134,7 +132,6 @@ client.get(query).then(result => {
 
 ```
 
-
 ### Customization
 
 To hide the summary info about the picked emoji, you can add `hideSummary` to the options:
@@ -150,9 +147,7 @@ To hide the summary info about the picked emoji, you can add `hideSummary` to th
 }
 ```
 
-
-To customize the picker, you can pass the same options as the emoji-mart picker accepts in a picker `object`. [Full list of options.](https://github.com/missive/emoji-mart#picker)
-
+The emoji input accepts a`picker` option that accepts the same options as the emoji-mart picker. [Full list of options.](https://github.com/missive/emoji-mart#picker)
 
 ```js
 {
@@ -170,4 +165,9 @@ To customize the picker, you can pass the same options as the emoji-mart picker 
 }
 ```
 
-![Emoji picker example](/docs/custom.png)
+## Options
+
+| Prop            | Required | Default | Description                                                                                                   |
+| --------------- | :------: | ------- | ------------------------------------------------------------------------------------------------------------- |
+| **hideSummary** |          | `false` | Hides the emoji summary from the form                                                                         |
+| **picker**      |          |         | For a full list of options, see the [emoji-mart](https://github.com/missive/emoji-mart#picker) documentation. |

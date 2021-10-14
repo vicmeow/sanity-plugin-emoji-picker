@@ -1,4 +1,5 @@
 import EmojiInput from "../lib"
+import React from "react"
 export default {
   name: "emoji",
   title: "Emoji",
@@ -8,65 +9,71 @@ export default {
     {
       name: "id",
       title: "ID",
-      type: "string"
+      type: "string",
     },
     {
       name: "name",
       title: "Name",
-      type: "string"
+      type: "string",
     },
     {
       name: "colons",
       title: "Colons",
-      type: "string"
+      type: "string",
     },
     {
       name: "text",
       title: "Text",
-      type: "string"
+      type: "string",
     },
     {
       name: "emoticons",
       title: "Emoticons",
       type: "array",
-      of: [{ type: "string" }]
+      of: [{ type: "string" }],
     },
     {
       name: "short_names",
       title: "Short-names",
       type: "array",
-      of: [{ type: "string" }]
+      of: [{ type: "string" }],
     },
     {
       name: "skin",
       title: "Skin",
-      type: "number"
+      type: "number",
     },
     {
       name: "unified",
       title: "Unified",
-      type: "string"
+      type: "string",
     },
     {
       name: "native",
       title: "Native",
-      type: "string"
+      type: "string",
     },
     {
       name: "imageUrl",
       title: "Image URL",
-      type: "url"
+      type: "url",
     },
     {
       name: "keywords",
       title: "Keywords",
       type: "array",
-      of: [{ type: "string" }]
+      of: [{ type: "string" }],
     },
     {
       name: "customCategory",
       title: "Custom Category",
-      type: "string"
-    }
-  ]
+      type: "string",
+    },
+  ],
+  preview: {
+    select: {
+      title: "native",
+      subtitle: "name",
+    },
+  },
 }
