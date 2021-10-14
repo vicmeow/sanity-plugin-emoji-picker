@@ -1,5 +1,4 @@
-import EmojiInput from "../lib"
-import React from "react"
+import EmojiInput from "./EmojiPicker";
 export default {
   name: "emoji",
   title: "Emoji",
@@ -76,4 +75,4 @@ export default {
       subtitle: "name",
     },
   },
-}
+};

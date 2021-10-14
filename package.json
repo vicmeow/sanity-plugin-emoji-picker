@@ -15,11 +15,12 @@
   "bugs": {
     "url": "https://github.com/vicbergquist/sanity-emoji-picker/issues"
   },
-  "main": "index.js",
+  "main": "lib/EmojiPicker.js",
   "scripts": {
-    "build": "babel src -d lib --copy-files",
-    "build-watch": "babel src -d lib --copy-files --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint .",
+    "build": "sanipack build",
+    "watch": "sanipack build --watch",
+    "prepublishOnly": "sanipack build && sanipack verify"
   },
   "repository": {
     "type": "git",
@@ -30,27 +31,36 @@
     "@sanity/ui": "^0.36.12",
     "@types/react": "^17.0.27",
     "@types/styled-components": "^5.1.14",
-    "babel-cli": "6.26.0",
-    "babel-eslint": "^7.2.3",
-    "babel-plugin-syntax-class-properties": "^6.13.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-es2015": "6.24.1",
-    "babel-preset-react": "6.24.1",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-sanity": "^5.1.0",
+    "eslint-plugin-react": "^7.26.1",
+    "prettier": "^2.4.1",
+    "sanipack": "^2.1.0",
     "styled-components": "^5.2.0"
   },
   "peerDependencies": {
     "@sanity/base": ">=2.13.0",
     "@sanity/components": "^2.13.0",
     "@sanity/form-builder": "^2.13.0",
-    "@sanity/icons": "^1.2",
-    "@sanity/ui": "^0.36.12",
     "react": "^16.9 || ^17",
     "react-dom": ">= 16.2",
     "styled-components": "^5.2.0"
   },
   "dependencies": {
     "emoji-mart": "^3.0.1",
-    "prop-types": "^15.7.2",
-    "react": "^16.9 || ^17"
+    "@sanity/icons": "^1.2",
+    "@sanity/ui": "^0.36.12"
+  },
+  "eslintConfig": {
+    "parser": "sanipack/babel/eslint-parser",
+    "extends": [
+      "sanity",
+      "sanity/react",
+      "prettier"
+    ],
+    "ignorePatterns": [
+      "lib/**/"
+    ]
   }
 }

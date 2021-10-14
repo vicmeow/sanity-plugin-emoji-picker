@@ -3,3 +3,13 @@
 /example
 /node_modules
 .vscode
+/test
+/coverage
+.editorconfig
+.eslintrc
+.gitignore
+.github
+.prettierrc
+.travis.yml
+.nyc_output
+.babelrc
